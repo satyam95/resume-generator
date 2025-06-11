@@ -1,3 +1,4 @@
+import AuthCard from "@/components/AuthCard";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -34,12 +35,15 @@ export default function Home() {
                 <span className="text-sm leading-none">v1.0.0</span>
               </div>
             </div>
-            <Button size="sm" asChild>
-              <Link href="/resume/new">
-                <Plus className="w-4 h-4" strokeWidth={3} />
-                Create Resume
-              </Link>
-            </Button>
+            <div className="flex gap-4 items-center">
+              <Button size="sm" asChild>
+                <Link href="/resume/new">
+                  <Plus className="w-4 h-4" strokeWidth={3} />
+                  Create Resume
+                </Link>
+              </Button>
+              <AuthCard />
+            </div>
           </div>
           <div className="bg-white h-[calc(100vh-5rem)] rounded-md">
             <div className="p-4">
