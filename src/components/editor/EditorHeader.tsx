@@ -1,15 +1,45 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
-import { ArrowLeft, Download, Save } from "lucide-react";
+import { ArrowLeft, Download, Loader2, Save } from "lucide-react";
 import { useResume } from "@/hooks/useResume";
+import { useRouter } from "next/navigation";
+import { saveResume } from "@/actions/resume";
+import { toast } from "sonner";
 
 const EditorHeader = () => {
+  const [saving, setSaving] = useState(false);
   const { resume, updateResumeName } = useResume();
+  const router = useRouter();
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const { id } = await saveResume(resume.id, resume);
+      if (!resume.id) {
+        router.push(`/resume/${id}`);
+      }
+      toast.success(
+        resume.id
+          ? "Resume updated successfully!"
+          : "Resume saved successfully!"
+      );
+    } catch (error) {
+      console.error("Error saving resume:", error);
+      toast.error("Failed to save resume.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div className="h-16 flex items-center justify-between">
       <div className="flex items-center gap-1">
-        <Button size="sm">
+        <Button
+          className="cursor-pointer"
+          size="sm"
+          onClick={() => router.push("/")}
+        >
           <ArrowLeft size={20} />
           Back
         </Button>
@@ -22,11 +52,25 @@ const EditorHeader = () => {
         />
       </div>
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="sm" className="w-28">
-          <Save className="w-4 h-4" strokeWidth={3} />
-          Save
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-28 cursor-pointer"
+          onClick={handleSave}
+        >
+          {saving ? (
+            <span className="inline-flex items-center">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Saving...
+            </span>
+          ) : (
+            <>
+              <Save className="w-4 h-4" strokeWidth={3} />
+              {resume.id ? "Update" : "Save"}
+            </>
+          )}
         </Button>
-        <Button size="sm" className="w-28">
+        <Button size="sm" className="w-28 cursor-pointer">
           <Download className="w-4 h-4" strokeWidth={3} />
           Download
         </Button>

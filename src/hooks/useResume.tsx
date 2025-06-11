@@ -5,7 +5,7 @@ import type {
   ContactInfo,
   Education,
   Project,
-  Resume,
+  ResumeData,
   Skill,
   WorkExperience,
 } from "@/types/resume";
@@ -15,32 +15,26 @@ import { v4 as uuidv4 } from "uuid";
 
 // Define the context shape
 interface ResumeContextType {
-  resume: Resume;
+  resume: ResumeData & { id?: string; createdAt?: string; updatedAt?: string };
   updateContactInfo: (contactInfo: ContactInfo) => void;
-  updateSummaryInfo: (summaryInfo: Resume["resumeData"]["summaryInfo"]) => void;
-  updateExperienceInfo: (
-    experienceInfo: Resume["resumeData"]["experienceInfo"]
-  ) => void;
+  updateSummaryInfo: (summaryInfo: ResumeData["summaryInfo"]) => void;
+  updateExperienceInfo: (experienceInfo: ResumeData["experienceInfo"]) => void;
   addExperience: (experience: Omit<WorkExperience, "id">) => void;
   updateExperience: (id: string, experience: Partial<WorkExperience>) => void;
   deleteExperience: (id: string) => void;
-  updateEducationInfo: (
-    educationInfo: Resume["resumeData"]["educationInfo"]
-  ) => void;
+  updateEducationInfo: (educationInfo: ResumeData["educationInfo"]) => void;
   addEducation: (education: Omit<Education, "id">) => void;
   updateEducation: (id: string, education: Partial<Education>) => void;
   deleteEducation: (id: string) => void;
-  updateSkillsInfo: (skillsInfo: Resume["resumeData"]["skillsInfo"]) => void;
+  updateSkillsInfo: (skillsInfo: ResumeData["skillsInfo"]) => void;
   addSkill: (skill: Omit<Skill, "id">) => void;
   updateSkill: (id: string, skill: Partial<Skill>) => void;
   deleteSkill: (id: string) => void;
-  updateProjectsInfo: (
-    projectsInfo: Resume["resumeData"]["projectsInfo"]
-  ) => void;
+  updateProjectsInfo: (projectsInfo: ResumeData["projectsInfo"]) => void;
   addProject: (project: Omit<Project, "id">) => void;
   updateProject: (id: string, project: Partial<Project>) => void;
   deleteProject: (id: string) => void;
-  updateAwardsInfo: (awardsInfo: Resume["resumeData"]["awardsInfo"]) => void;
+  updateAwardsInfo: (awardsInfo: ResumeData["awardsInfo"]) => void;
   addAward: (award: Omit<Award, "id">) => void;
   updateAward: (id: string, award: Partial<Award>) => void;
   deleteAward: (id: string) => void;
@@ -53,47 +47,49 @@ const ResumeContext = createContext<ResumeContextType | undefined>(undefined);
 // Resume Provider component
 interface ResumeProviderProps {
   children: ReactNode;
+  initialData: ResumeData;
+  resumeId?: string;
 }
 
-export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
-  const [resume, setResume] = useState<Resume>(initialResumeData);
+export const ResumeProvider: React.FC<ResumeProviderProps> = ({
+  children,
+  initialData,
+  resumeId,
+}) => {
+  const [resume, setResume] = useState<
+    ResumeData & { id?: string; createdAt?: string; updatedAt?: string }
+  >({
+    ...initialData,
+    id: resumeId,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  });
 
   // Update contact information
   const updateContactInfo = (contactInfo: ContactInfo) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        contactInfo,
-      },
+      contactInfo,
       updatedAt: new Date().toISOString(),
     }));
   };
 
   // Update summary information
-  const updateSummaryInfo = (
-    summaryInfo: Resume["resumeData"]["summaryInfo"]
-  ) => {
+  const updateSummaryInfo = (summaryInfo: ResumeData["summaryInfo"]) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        summaryInfo,
-      },
+      summaryInfo,
       updatedAt: new Date().toISOString(),
     }));
   };
 
   // Update experience information (section title or entire experience list)
   const updateExperienceInfo = (
-    experienceInfo: Resume["resumeData"]["experienceInfo"]
+    experienceInfo: ResumeData["experienceInfo"]
   ) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        experienceInfo,
-      },
+      experienceInfo,
       updatedAt: new Date().toISOString(),
     }));
   };
@@ -102,15 +98,12 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   const addExperience = (experience: Omit<WorkExperience, "id">) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        experienceInfo: {
-          ...prev.resumeData.experienceInfo,
-          experience: [
-            ...prev.resumeData.experienceInfo.experience,
-            { ...experience, id: uuidv4() },
-          ],
-        },
+      experienceInfo: {
+        ...prev.experienceInfo,
+        experience: [
+          ...prev.experienceInfo.experience,
+          { ...experience, id: uuidv4() },
+        ],
       },
       updatedAt: new Date().toISOString(),
     }));
@@ -123,14 +116,11 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   ) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        experienceInfo: {
-          ...prev.resumeData.experienceInfo,
-          experience: prev.resumeData.experienceInfo.experience.map((exp) =>
-            exp.id === id ? { ...exp, ...experience } : exp
-          ),
-        },
+      experienceInfo: {
+        ...prev.experienceInfo,
+        experience: prev.experienceInfo.experience.map((exp) =>
+          exp.id === id ? { ...exp, ...experience } : exp
+        ),
       },
       updatedAt: new Date().toISOString(),
     }));
@@ -140,29 +130,21 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   const deleteExperience = (id: string) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        experienceInfo: {
-          ...prev.resumeData.experienceInfo,
-          experience: prev.resumeData.experienceInfo.experience.filter(
-            (exp) => exp.id !== id
-          ),
-        },
+      experienceInfo: {
+        ...prev.experienceInfo,
+        experience: prev.experienceInfo.experience.filter(
+          (exp) => exp.id !== id
+        ),
       },
       updatedAt: new Date().toISOString(),
     }));
   };
 
   // Update education information
-  const updateEducationInfo = (
-    educationInfo: Resume["resumeData"]["educationInfo"]
-  ) => {
+  const updateEducationInfo = (educationInfo: ResumeData["educationInfo"]) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        educationInfo,
-      },
+      educationInfo,
       updatedAt: new Date().toISOString(),
     }));
   };
@@ -171,15 +153,12 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   const addEducation = (education: Omit<Education, "id">) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        educationInfo: {
-          ...prev.resumeData.educationInfo,
-          education: [
-            ...prev.resumeData.educationInfo.education,
-            { ...education, id: uuidv4() },
-          ],
-        },
+      educationInfo: {
+        ...prev.educationInfo,
+        education: [
+          ...prev.educationInfo.education,
+          { ...education, id: uuidv4() },
+        ],
       },
       updatedAt: new Date().toISOString(),
     }));
@@ -189,14 +168,11 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   const updateEducation = (id: string, education: Partial<Education>) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        educationInfo: {
-          ...prev.resumeData.educationInfo,
-          education: prev.resumeData.educationInfo.education.map((edu) =>
-            edu.id === id ? { ...edu, ...education } : edu
-          ),
-        },
+      educationInfo: {
+        ...prev.educationInfo,
+        education: prev.educationInfo.education.map((edu) =>
+          edu.id === id ? { ...edu, ...education } : edu
+        ),
       },
       updatedAt: new Date().toISOString(),
     }));
@@ -206,27 +182,19 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   const deleteEducation = (id: string) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        educationInfo: {
-          ...prev.resumeData.educationInfo,
-          education: prev.resumeData.educationInfo.education.filter(
-            (edu) => edu.id !== id
-          ),
-        },
+      educationInfo: {
+        ...prev.educationInfo,
+        education: prev.educationInfo.education.filter((edu) => edu.id !== id),
       },
       updatedAt: new Date().toISOString(),
     }));
   };
 
   // Update skills information
-  const updateSkillsInfo = (skillsInfo: Resume["resumeData"]["skillsInfo"]) => {
+  const updateSkillsInfo = (skillsInfo: ResumeData["skillsInfo"]) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        skillsInfo,
-      },
+      skillsInfo,
       updatedAt: new Date().toISOString(),
     }));
   };
@@ -235,15 +203,9 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   const addSkill = (skill: Omit<Skill, "id">) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        skillsInfo: {
-          ...prev.resumeData.skillsInfo,
-          skills: [
-            ...prev.resumeData.skillsInfo.skills,
-            { ...skill, id: uuidv4() },
-          ],
-        },
+      skillsInfo: {
+        ...prev.skillsInfo,
+        skills: [...prev.skillsInfo.skills, { ...skill, id: uuidv4() }],
       },
       updatedAt: new Date().toISOString(),
     }));
@@ -253,14 +215,11 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   const updateSkill = (id: string, skill: Partial<Skill>) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        skillsInfo: {
-          ...prev.resumeData.skillsInfo,
-          skills: prev.resumeData.skillsInfo.skills.map((s) =>
-            s.id === id ? { ...s, ...skill } : s
-          ),
-        },
+      skillsInfo: {
+        ...prev.skillsInfo,
+        skills: prev.skillsInfo.skills.map((s) =>
+          s.id === id ? { ...s, ...skill } : s
+        ),
       },
       updatedAt: new Date().toISOString(),
     }));
@@ -270,27 +229,19 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   const deleteSkill = (id: string) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        skillsInfo: {
-          ...prev.resumeData.skillsInfo,
-          skills: prev.resumeData.skillsInfo.skills.filter((s) => s.id !== id),
-        },
+      skillsInfo: {
+        ...prev.skillsInfo,
+        skills: prev.skillsInfo.skills.filter((s) => s.id !== id),
       },
       updatedAt: new Date().toISOString(),
     }));
   };
 
   // Update projects information
-  const updateProjectsInfo = (
-    projectsInfo: Resume["resumeData"]["projectsInfo"]
-  ) => {
+  const updateProjectsInfo = (projectsInfo: ResumeData["projectsInfo"]) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        projectsInfo,
-      },
+      projectsInfo,
       updatedAt: new Date().toISOString(),
     }));
   };
@@ -299,15 +250,9 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   const addProject = (project: Omit<Project, "id">) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        projectsInfo: {
-          ...prev.resumeData.projectsInfo,
-          projects: [
-            ...prev.resumeData.projectsInfo.projects,
-            { ...project, id: uuidv4() },
-          ],
-        },
+      projectsInfo: {
+        ...prev.projectsInfo,
+        projects: [...prev.projectsInfo.projects, { ...project, id: uuidv4() }],
       },
       updatedAt: new Date().toISOString(),
     }));
@@ -317,14 +262,11 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   const updateProject = (id: string, project: Partial<Project>) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        projectsInfo: {
-          ...prev.resumeData.projectsInfo,
-          projects: prev.resumeData.projectsInfo.projects.map((p) =>
-            p.id === id ? { ...p, ...project } : p
-          ),
-        },
+      projectsInfo: {
+        ...prev.projectsInfo,
+        projects: prev.projectsInfo.projects.map((p) =>
+          p.id === id ? { ...p, ...project } : p
+        ),
       },
       updatedAt: new Date().toISOString(),
     }));
@@ -334,27 +276,19 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   const deleteProject = (id: string) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        projectsInfo: {
-          ...prev.resumeData.projectsInfo,
-          projects: prev.resumeData.projectsInfo.projects.filter(
-            (p) => p.id !== id
-          ),
-        },
+      projectsInfo: {
+        ...prev.projectsInfo,
+        projects: prev.projectsInfo.projects.filter((p) => p.id !== id),
       },
       updatedAt: new Date().toISOString(),
     }));
   };
 
   // Update awards information
-  const updateAwardsInfo = (awardsInfo: Resume["resumeData"]["awardsInfo"]) => {
+  const updateAwardsInfo = (awardsInfo: ResumeData["awardsInfo"]) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        awardsInfo,
-      },
+      awardsInfo,
       updatedAt: new Date().toISOString(),
     }));
   };
@@ -363,15 +297,9 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   const addAward = (award: Omit<Award, "id">) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        awardsInfo: {
-          ...prev.resumeData.awardsInfo,
-          awards: [
-            ...prev.resumeData.awardsInfo.awards,
-            { ...award, id: uuidv4() },
-          ],
-        },
+      awardsInfo: {
+        ...prev.awardsInfo,
+        awards: [...prev.awardsInfo.awards, { ...award, id: uuidv4() }],
       },
       updatedAt: new Date().toISOString(),
     }));
@@ -381,14 +309,11 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   const updateAward = (id: string, award: Partial<Award>) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        awardsInfo: {
-          ...prev.resumeData.awardsInfo,
-          awards: prev.resumeData.awardsInfo.awards.map((a) =>
-            a.id === id ? { ...a, ...award } : a
-          ),
-        },
+      awardsInfo: {
+        ...prev.awardsInfo,
+        awards: prev.awardsInfo.awards.map((a) =>
+          a.id === id ? { ...a, ...award } : a
+        ),
       },
       updatedAt: new Date().toISOString(),
     }));
@@ -398,12 +323,9 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   const deleteAward = (id: string) => {
     setResume((prev) => ({
       ...prev,
-      resumeData: {
-        ...prev.resumeData,
-        awardsInfo: {
-          ...prev.resumeData.awardsInfo,
-          awards: prev.resumeData.awardsInfo.awards.filter((a) => a.id !== id),
-        },
+      awardsInfo: {
+        ...prev.awardsInfo,
+        awards: prev.awardsInfo.awards.filter((a) => a.id !== id),
       },
       updatedAt: new Date().toISOString(),
     }));
@@ -417,6 +339,15 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
       updatedAt: new Date().toISOString(),
     }));
   };
+
+  // // Update template settings
+  // const updateTemplateSettings = (templateSettings: ResumeData["templateSettings"]) => {
+  //   setResume((prev) => ({
+  //     ...prev,
+  //     templateSettings,
+  //     updatedAt: new Date().toISOString(),
+  //   }));
+  // };
 
   return (
     <ResumeContext.Provider

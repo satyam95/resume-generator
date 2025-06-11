@@ -47,6 +47,10 @@ export interface Award {
 }
 
 export interface ResumeData {
+  name: string;
+  templateSettings: {
+    templateType: string;
+  };
   contactInfo: ContactInfo;
   summaryInfo?: {
     sectionTitle: string;
@@ -73,13 +77,4 @@ export interface ResumeData {
     sectionTitle: string;
     awards: Award[];
   };
-}
-
-export interface Resume {
-  id: string;
-  name: string;
-  template: string;
-  resumeData: ResumeData;
-  createdAt: string;
-  updatedAt: string;
 }

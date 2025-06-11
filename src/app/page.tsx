@@ -1,21 +1,7 @@
 import AuthCard from "@/components/AuthCard";
+import ResumesTable from "@/components/ResumesTable";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Copy,
-  FileDown,
-  GalleryVerticalEnd,
-  Pencil,
-  Plus,
-  Trash2,
-} from "lucide-react";
+import { GalleryVerticalEnd, Plus } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -47,56 +33,7 @@ export default function Home() {
           </div>
           <div className="bg-white h-[calc(100vh-5rem)] rounded-md">
             <div className="p-4">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[5%]">S.No</TableHead>
-                    <TableHead className="w-[25%]">Name</TableHead>
-                    <TableHead className="w-[15%]">Created</TableHead>
-                    <TableHead className="w-[15%]">Modified</TableHead>
-                    <TableHead className="w-[7%] text-center">Edit</TableHead>
-                    <TableHead className="w-[7%] text-center">
-                      Download
-                    </TableHead>
-                    <TableHead className="w-[7%] text-center">Copy</TableHead>
-                    <TableHead className="w-[7%] text-center">Delete</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow className="py-2">
-                    <TableCell className="w-[5%]">1</TableCell>
-                    <TableCell className="w-[25%]">John Doe</TableCell>
-                    <TableCell className="w-[15%]">
-                      2024-01-15T10:00:00Z
-                    </TableCell>
-                    <TableCell className="w-[15%]">
-                      2025-06-09T12:30:00Z
-                    </TableCell>
-                    <TableCell className="w-[7%]">
-                      <div className="w-full flex items-center justify-center">
-                        <Link href={`/resume/resume-001`}>
-                          <Pencil className="w-5 h-5" strokeWidth={2} />
-                        </Link>
-                      </div>
-                    </TableCell>
-                    <TableCell className="w-[7%]">
-                      <div className="w-full flex items-center justify-center">
-                        <FileDown className="w-5 h-5" strokeWidth={2} />
-                      </div>
-                    </TableCell>
-                    <TableCell className="w-[7%]">
-                      <div className="w-full flex items-center justify-center">
-                        <Copy className="w-5 h-5" strokeWidth={2} />
-                      </div>
-                    </TableCell>
-                    <TableCell className="w-[7%]">
-                      <div className="w-full flex items-center justify-center">
-                        <Trash2 className="w-5 h-5" strokeWidth={2} />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+              <ResumesTable />
             </div>
           </div>
         </div>

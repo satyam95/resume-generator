@@ -60,10 +60,10 @@ const EditorForm = () => {
                 id="name"
                 type="text"
                 placeholder="Full Name"
-                value={resume.resumeData.contactInfo.name}
+                value={resume.contactInfo.name}
                 onChange={(e) =>
                   updateContactInfo({
-                    ...resume.resumeData.contactInfo,
+                    ...resume.contactInfo,
                     name: e.target.value,
                   })
                 }
@@ -76,10 +76,10 @@ const EditorForm = () => {
                 id="email"
                 type="email"
                 placeholder="Email"
-                value={resume.resumeData.contactInfo.email}
+                value={resume.contactInfo.email}
                 onChange={(e) =>
                   updateContactInfo({
-                    ...resume.resumeData.contactInfo,
+                    ...resume.contactInfo,
                     email: e.target.value,
                   })
                 }
@@ -92,10 +92,10 @@ const EditorForm = () => {
                 id="phone"
                 type="tel"
                 placeholder="Phone"
-                value={resume.resumeData.contactInfo.phone}
+                value={resume.contactInfo.phone}
                 onChange={(e) =>
                   updateContactInfo({
-                    ...resume.resumeData.contactInfo,
+                    ...resume.contactInfo,
                     phone: e.target.value,
                   })
                 }
@@ -108,10 +108,10 @@ const EditorForm = () => {
                 id="location"
                 type="text"
                 placeholder="Location"
-                value={resume.resumeData.contactInfo.location}
+                value={resume.contactInfo.location}
                 onChange={(e) =>
                   updateContactInfo({
-                    ...resume.resumeData.contactInfo,
+                    ...resume.contactInfo,
                     location: e.target.value,
                   })
                 }
@@ -124,10 +124,10 @@ const EditorForm = () => {
                 id="linkedIn"
                 type="text"
                 placeholder="LinkedIn profile url"
-                value={resume.resumeData.contactInfo.linkedIn || ""}
+                value={resume.contactInfo.linkedIn || ""}
                 onChange={(e) =>
                   updateContactInfo({
-                    ...resume.resumeData.contactInfo,
+                    ...resume.contactInfo,
                     linkedIn: e.target.value || undefined,
                   })
                 }
@@ -140,10 +140,10 @@ const EditorForm = () => {
                 id="github"
                 type="text"
                 placeholder="Github profile url"
-                value={resume.resumeData.contactInfo.github || ""}
+                value={resume.contactInfo.github || ""}
                 onChange={(e) =>
                   updateContactInfo({
-                    ...resume.resumeData.contactInfo,
+                    ...resume.contactInfo,
                     github: e.target.value || undefined,
                   })
                 }
@@ -156,10 +156,10 @@ const EditorForm = () => {
                 id="website"
                 type="text"
                 placeholder="Website url"
-                value={resume.resumeData.contactInfo.website || ""}
+                value={resume.contactInfo.website || ""}
                 onChange={(e) =>
                   updateContactInfo({
-                    ...resume.resumeData.contactInfo,
+                    ...resume.contactInfo,
                     website: e.target.value || undefined,
                   })
                 }
@@ -181,10 +181,10 @@ const EditorForm = () => {
                 id="sectionTitle"
                 type="text"
                 placeholder="Section Title"
-                value={resume.resumeData.summaryInfo?.sectionTitle || ""}
+                value={resume.summaryInfo?.sectionTitle || ""}
                 onChange={(e) =>
                   updateSummaryInfo({
-                    ...resume.resumeData.summaryInfo!,
+                    ...resume.summaryInfo!,
                     sectionTitle: e.target.value,
                   })
                 }
@@ -200,10 +200,10 @@ const EditorForm = () => {
                   </Label>
                   <Switch
                     id="isHidden"
-                    checked={resume.resumeData.summaryInfo?.isHidden || false}
+                    checked={resume.summaryInfo?.isHidden || false}
                     onCheckedChange={(checked) =>
                       updateSummaryInfo({
-                        ...resume.resumeData.summaryInfo!,
+                        ...resume.summaryInfo!,
                         isHidden: checked,
                       })
                     }
@@ -213,10 +213,10 @@ const EditorForm = () => {
               <Textarea
                 id="content"
                 placeholder="summary..."
-                value={resume.resumeData.summaryInfo?.content || ""}
+                value={resume.summaryInfo?.content || ""}
                 onChange={(e) =>
                   updateSummaryInfo({
-                    ...resume.resumeData.summaryInfo!,
+                    ...resume.summaryInfo!,
                     content: e.target.value,
                   })
                 }
@@ -243,17 +243,17 @@ const EditorForm = () => {
                 id="sectionTitle"
                 type="text"
                 placeholder="Section Title"
-                value={resume.resumeData.experienceInfo.sectionTitle}
+                value={resume.experienceInfo.sectionTitle}
                 onChange={(e) =>
                   updateExperienceInfo({
-                    ...resume.resumeData.experienceInfo,
+                    ...resume.experienceInfo,
                     sectionTitle: e.target.value,
                   })
                 }
                 className="focus-visible:ring-transparent"
               />
             </div>
-            {resume.resumeData.experienceInfo.experience.map((exp, index) => (
+            {resume.experienceInfo.experience.map((exp, index) => (
               <div className="bg-gray-50 rounded-md p-4" key={exp.id}>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
@@ -418,17 +418,17 @@ const EditorForm = () => {
                 id="sectionTitle"
                 type="text"
                 placeholder="Section Title"
-                value={resume.resumeData.skillsInfo.sectionTitle}
+                value={resume.skillsInfo.sectionTitle}
                 onChange={(e) =>
                   updateSkillsInfo({
-                    ...resume.resumeData.skillsInfo,
+                    ...resume.skillsInfo,
                     sectionTitle: e.target.value,
                   })
                 }
                 className="focus-visible:ring-transparent"
               />
             </div>
-            {resume.resumeData.skillsInfo.skills.map((skill, index) => (
+            {resume.skillsInfo.skills.map((skill, index) => (
               <div className="bg-gray-50 rounded-md p-4" key={skill.id}>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
@@ -504,17 +504,17 @@ const EditorForm = () => {
                 id="sectionTitle"
                 type="text"
                 placeholder="Section Title"
-                value={resume.resumeData.projectsInfo.sectionTitle}
+                value={resume.projectsInfo.sectionTitle}
                 onChange={(e) =>
                   updateProjectsInfo({
-                    ...resume.resumeData.projectsInfo,
+                    ...resume.projectsInfo,
                     sectionTitle: e.target.value,
                   })
                 }
                 className="focus-visible:ring-transparent"
               />
             </div>
-            {resume.resumeData.projectsInfo.projects.map((project, index) => (
+            {resume.projectsInfo.projects.map((project, index) => (
               <div key={project.id} className="bg-gray-50 rounded-md p-4">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
@@ -663,17 +663,17 @@ const EditorForm = () => {
                 id="sectionTitle"
                 type="text"
                 placeholder="Section Title"
-                value={resume.resumeData.educationInfo.sectionTitle}
+                value={resume.educationInfo.sectionTitle}
                 onChange={(e) =>
                   updateEducationInfo({
-                    ...resume.resumeData.educationInfo,
+                    ...resume.educationInfo,
                     sectionTitle: e.target.value,
                   })
                 }
                 className="focus-visible:ring-transparent"
               />
             </div>
-            {resume.resumeData.educationInfo.education.map((edu, index) => (
+            {resume.educationInfo.education.map((edu, index) => (
               <div key={edu.id} className="bg-gray-50 rounded-md p-4">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
@@ -772,17 +772,17 @@ const EditorForm = () => {
                 id="sectionTitle"
                 type="text"
                 placeholder="Section Title"
-                value={resume.resumeData.awardsInfo.sectionTitle}
+                value={resume.awardsInfo.sectionTitle}
                 onChange={(e) =>
                   updateAwardsInfo({
-                    ...resume.resumeData.awardsInfo,
+                    ...resume.awardsInfo,
                     sectionTitle: e.target.value,
                   })
                 }
                 className="focus-visible:ring-transparent"
               />
             </div>
-            {resume.resumeData.awardsInfo.awards.map((award, index) => (
+            {resume.awardsInfo.awards.map((award, index) => (
               <div className="bg-gray-50 rounded-md p-4">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">

@@ -1,0 +1,1 @@
+ALTER TABLE "resumes" ALTER COLUMN "name" DROP DEFAULT;
