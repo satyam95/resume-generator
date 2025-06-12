@@ -32,7 +32,7 @@ const Resume = ({ initialData, resumeId }: ResumeDataProps) => {
               <EditorForm />
             </div>
           </div>
-          <div className="w-[800px] bg-white h-[calc(100vh-5rem)] overflow-y-auto no-scrollbar rounded-md">
+          <div className="w-[870px] bg-white h-[calc(100vh-5rem)] overflow-y-auto no-scrollbar">
             <EditorPreview />
           </div>
         </div>

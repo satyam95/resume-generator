@@ -1,11 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
-import { ArrowLeft, Download, Loader2, Save } from "lucide-react";
+import { ArrowLeft, Loader2, Save } from "lucide-react";
 import { useResume } from "@/hooks/useResume";
 import { useRouter } from "next/navigation";
 import { saveResume } from "@/actions/resume";
 import { toast } from "sonner";
+import PDFDownloadLink from "../pdf/PDFDownloadLink ";
 
 const EditorHeader = () => {
   const [saving, setSaving] = useState(false);
@@ -55,7 +56,7 @@ const EditorHeader = () => {
         <Button
           variant="outline"
           size="sm"
-          className="w-28 cursor-pointer"
+          className="w-32 cursor-pointer"
           onClick={handleSave}
         >
           {saving ? (
@@ -70,10 +71,7 @@ const EditorHeader = () => {
             </>
           )}
         </Button>
-        <Button size="sm" className="w-28 cursor-pointer">
-          <Download className="w-4 h-4" strokeWidth={3} />
-          Download
-        </Button>
+        <PDFDownloadLink data={resume} className="w-32" />
       </div>
     </div>
   );

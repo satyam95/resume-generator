@@ -15,6 +15,7 @@ import { copyResume, deleteResume, getUserResumes } from "@/actions/resume";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
+import PDFDownloadLink from "./pdf/PDFDownloadLink ";
 
 type ResumeProps = {
   id: string;
@@ -140,14 +141,9 @@ const ResumesTable = () => {
             </TableCell>
             <TableCell className="w-[7%]">
               <div className="w-full flex items-center justify-center">
-                <Button
-                  className="p-0 cursor-pointer"
-                  variant="link"
-                  onClick={() => handleDownload(resume)}
-                  asChild
-                >
-                  <FileDown className="w-5 h-5" strokeWidth={2} />
-                </Button>
+                <div className="w-fit">
+                  <PDFDownloadLink variant="link" className="has-[>svg]:p-0" data={resume.data} asChild/>
+                </div>
               </div>
             </TableCell>
             <TableCell className="w-[7%]">
