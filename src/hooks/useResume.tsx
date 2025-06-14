@@ -1,7 +1,7 @@
 "use client";
-import initialResumeData from "@/data/sampleData";
 import type {
   Award,
+  Certificate,
   ContactInfo,
   Education,
   Project,
@@ -38,6 +38,12 @@ interface ResumeContextType {
   addAward: (award: Omit<Award, "id">) => void;
   updateAward: (id: string, award: Partial<Award>) => void;
   deleteAward: (id: string) => void;
+  updateCertificationInfo: (
+    certificationInfo: ResumeData["certificationInfo"]
+  ) => void; // Added
+  addCertificate: (certificate: Omit<Certificate, "id">) => void; // Added
+  updateCertificate: (id: string, certificate: Partial<Certificate>) => void; // Added
+  deleteCertificate: (id: string) => void; // Added
   updateResumeName: (name: string) => void;
 }
 
@@ -340,6 +346,60 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({
     }));
   };
 
+  // Update certification information
+  const updateCertificationInfo = (
+    certificationInfo: ResumeData["certificationInfo"]
+  ) => {
+    setResume((prev) => ({
+      ...prev,
+      certificationInfo,
+      updatedAt: new Date().toISOString(),
+    }));
+  };
+
+  // Add a new certificate entry
+  const addCertificate = (certificate: Omit<Certificate, "id">) => {
+    setResume((prev) => ({
+      ...prev,
+      certificationInfo: {
+        ...prev.certificationInfo,
+        certificates: [
+          ...prev.certificationInfo.certificates,
+          { ...certificate, id: uuidv4() },
+        ],
+      },
+      updatedAt: new Date().toISOString(),
+    }));
+  };
+
+  // Update an existing certificate entry
+  const updateCertificate = (id: string, certificate: Partial<Certificate>) => {
+    setResume((prev) => ({
+      ...prev,
+      certificationInfo: {
+        ...prev.certificationInfo,
+        certificates: prev.certificationInfo.certificates.map((cert) =>
+          cert.id === id ? { ...cert, ...certificate } : cert
+        ),
+      },
+      updatedAt: new Date().toISOString(),
+    }));
+  };
+
+  // Delete a certificate entry
+  const deleteCertificate = (id: string) => {
+    setResume((prev) => ({
+      ...prev,
+      certificationInfo: {
+        ...prev.certificationInfo,
+        certificates: prev.certificationInfo.certificates.filter(
+          (cert) => cert.id !== id
+        ),
+      },
+      updatedAt: new Date().toISOString(),
+    }));
+  };
+
   // // Update template settings
   // const updateTemplateSettings = (templateSettings: ResumeData["templateSettings"]) => {
   //   setResume((prev) => ({
@@ -375,6 +435,10 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({
         addAward,
         updateAward,
         deleteAward,
+        updateCertificationInfo, // Added
+        addCertificate, // Added
+        updateCertificate, // Added
+        deleteCertificate,
         updateResumeName,
       }}
     >

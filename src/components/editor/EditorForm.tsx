@@ -39,6 +39,10 @@ const EditorForm = () => {
     deleteAward,
     updateAward,
     addAward,
+    updateCertificationInfo,
+    addCertificate,
+    deleteCertificate,
+    updateCertificate,
   } = useResume();
   return (
     <Accordion
@@ -783,7 +787,7 @@ const EditorForm = () => {
               />
             </div>
             {resume.awardsInfo.awards.map((award, index) => (
-              <div className="bg-gray-50 rounded-md p-4">
+              <div className="bg-gray-50 rounded-md p-4" key={index}>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <div className="font-medium">Award {index + 1}</div>
@@ -869,6 +873,112 @@ const EditorForm = () => {
                   title: "",
                   description: "",
                   year: "",
+                })
+              }
+            >
+              <Plus className="w-4 h-4" strokeWidth={3} /> Add
+            </Button>
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="certificate" className="rounded-lg border shadow">
+        <AccordionTrigger className="px-4 py-3">
+          <div className="text-lg font-semibold text-gray-900">
+            Certification
+          </div>
+        </AccordionTrigger>
+        <AccordionContent className="px-4 pb-4">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="sectionTitle">Section Title</Label>
+              <Input
+                id="sectionTitle"
+                type="text"
+                placeholder="Section Title"
+                value={resume.certificationInfo?.sectionTitle}
+                onChange={(e) =>
+                  updateCertificationInfo({
+                    ...resume.certificationInfo,
+                    sectionTitle: e.target.value,
+                  })
+                }
+                className="focus-visible:ring-transparent"
+              />
+            </div>
+            {resume.certificationInfo?.certificates.map(
+              (certificate, index) => (
+                <div className="bg-gray-50 rounded-md p-4" key={index}>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <div className="font-medium">Certificate {index + 1}</div>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="hover:bg-red-100"
+                        onClick={() => deleteCertificate(certificate.id)}
+                      >
+                        <Trash2 className="w-2 h-2 text-red-500" />
+                      </Button>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor={`description-${certificate.id}`}>
+                          Description
+                        </Label>
+                        <Textarea
+                          id={`description-${certificate.id}`}
+                          placeholder="Award Description"
+                          value={certificate.description}
+                          onChange={(e) =>
+                            updateCertificate(certificate.id, {
+                              description: e.target.value,
+                            })
+                          }
+                          className="focus-visible:ring-transparent"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor={`year-${certificate.id}`}>Year</Label>
+                        <Input
+                          type="text"
+                          id={`year-${certificate.id}`}
+                          placeholder="Certificate Year"
+                          value={certificate.year}
+                          onChange={(e) =>
+                            updateCertificate(certificate.id, {
+                              year: e.target.value,
+                            })
+                          }
+                          className="focus-visible:ring-transparent"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor={`url-${certificate.id}`}>URL</Label>
+                        <Input
+                          type="text"
+                          id={`url-${certificate.id}`}
+                          placeholder="Certificate Url"
+                          value={certificate.url}
+                          onChange={(e) =>
+                            updateCertificate(certificate.id, {
+                              url: e.target.value,
+                            })
+                          }
+                          className="focus-visible:ring-transparent"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            )}
+            <Button
+              size="sm"
+              onClick={() =>
+                addCertificate({
+                  description: "",
+                  year: "",
+                  url: "",
                 })
               }
             >

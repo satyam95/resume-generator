@@ -46,6 +46,13 @@ export interface Award {
   url?: string;
 }
 
+export interface Certificate {
+  id: string;
+  description: string;
+  year: string;
+  url?: string;
+}
+
 export interface ResumeData {
   name: string;
   templateSettings: {
@@ -76,5 +83,9 @@ export interface ResumeData {
   awardsInfo: {
     sectionTitle: string;
     awards: Award[];
+  };
+  certificationInfo: {
+    sectionTitle: string;
+    certificates: Certificate[];
   };
 }

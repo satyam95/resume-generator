@@ -134,6 +134,24 @@ const initialResumeData: ResumeData = {
       },
     ],
   },
+  certificationInfo: {
+    sectionTitle: "Certifications",
+    certificates: [
+      {
+        id: "cert-01",
+        description: "Become a Product Manager",
+        year: "2019",
+        url: "https://hackathon2020.example.com",
+      },
+      {
+        id: "cert-02",
+        description: "Design Thinking: Understanding the Process",
+        year: "2016",
+        url: "https://hackathon2020.example.com",
+      }
+    ]
+
+  }
 };
 
 export default initialResumeData;
